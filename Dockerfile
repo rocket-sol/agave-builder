@@ -1,7 +1,7 @@
 ARG AGAVE_VERSION=v2.3.6
 ARG AGAVE_SRC_DIR=/home/sol/agave-${AGAVE_VERSION}
 
-FROM ubuntu:jammy AS source
+FROM ubuntu:noble AS source
 
 RUN --mount=type=cache,dst=/var/lib/apt apt-get update && apt-get install -y \
   autoconf \
@@ -60,7 +60,7 @@ RUN --mount=type=cache,target=$HOME/.cargo \
   . $HOME/.cargo/env \
   && ./scripts/cargo-install-all.sh --validator-only .
 
-FROM ubuntu:jammy AS ubuntu
+FROM ubuntu:noble AS ubuntu
 ARG AGAVE_VERSION
 ARG AGAVE_SRC_DIR
 COPY --from=build ${AGAVE_SRC_DIR}/bin/ /opt/agave/bin/
