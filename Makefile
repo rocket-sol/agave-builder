@@ -20,12 +20,12 @@ clean:
 	rm -rf build/*
 	rm -f agave-*.tar.xz sha256sum.txt sha256sum.txt.sig
 
-release: agave-$(AGAVE_VERSION).tar.xz sha256sum.txt sha256sum.txt.sig
+release: agave-$(AGAVE_VERSION).tar.xz sha256sum.txt
 
 sign: sha256sum.txt.sig
 	gh release upload $(AGAVE_VERSION) sha256sum.txt.sig
 
-publish: release
+publish: release sign
 	gh release create --generate-notes $(AGAVE_VERSION) agave-$(AGAVE_VERSION).tar.xz sha256sum.txt sha256sum.txt.sig
 
 sha256sum.txt: agave-$(AGAVE_VERSION).tar.xz
