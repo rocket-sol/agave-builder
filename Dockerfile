@@ -67,6 +67,7 @@ COPY --from=build ${AGAVE_SRC_DIR}/bin/ /opt/agave/bin/
 ENTRYPOINT ["/opt/agave/bin/solana-validator"]
 
 FROM scratch
+LABEL org.opencontainers.image.source https://github.com/rocket-sol/agave-builder
 ARG AGAVE_VERSION
 ARG AGAVE_SRC_DIR
 COPY --from=build ${AGAVE_SRC_DIR}/bin/ /
