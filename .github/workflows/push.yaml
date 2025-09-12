@@ -27,10 +27,14 @@ jobs:
       - run: docker buildx create --use
       - run: make build
       - run: make release
+      - name: Get version
+        id: get_version
+        run: echo "version=$(make version)" >> $GITHUB_OUTPUT
+
       - uses: ncipollo/release-action@v1
         with:
           commit: main
-          tag: v3.0.1
+          tag: ${{ steps.get_version.outputs.version }}
           artifacts: "solana-*.tar.bz2,sha256sum.txt"
           draft: true
           skipIfReleaseExists: true
