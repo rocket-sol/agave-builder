@@ -1,4 +1,4 @@
-.PHONY: build clean release
+.PHONY: build clean publish release version
 
 # renovate: datasource=github-releases depName=anza-xyz/agave
 AGAVE_VERSION ?= v3.0.1
@@ -28,6 +28,9 @@ sign: sha256sum.txt.sig
 
 publish: release sign
 	gh release create --generate-notes $(AGAVE_VERSION) solana-release-x86_64-unknown-linux-gnu.tar.bz2 sha256sum.txt sha256sum.txt.sig
+
+version:
+	@echo $(AGAVE_VERSION)
 
 sha256sum.txt: solana-release-x86_64-unknown-linux-gnu.tar.bz2
 	sha256sum solana-release-x86_64-unknown-linux-gnu.tar.bz2  > sha256sum.txt
