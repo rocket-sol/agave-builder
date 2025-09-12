@@ -1,4 +1,5 @@
 build
+*.tar.bz2
 *.tar.xz
 sha256sum.txt
 sha256sum.txt.sig

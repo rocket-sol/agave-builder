@@ -12,26 +12,32 @@ ifeq "$(ENABLE_CACHE)" "1"
 endif
 
 build:
-	mkdir -p build
+	mkdir -p build/bin
 	# Useful debug options: --progress=plain --load --target source --no-cache
-	docker buildx build . --build-arg JOBS_NUM=$(JOBS_NUM) --build-arg AGAVE_VERSION=$(AGAVE_VERSION) $(DOCKER_BUILD_CACHE_ARGS) --pull --output=build
+	docker buildx build . --build-arg JOBS_NUM=$(JOBS_NUM) --build-arg AGAVE_VERSION=$(AGAVE_VERSION) $(DOCKER_BUILD_CACHE_ARGS) --pull --output=build/bin
 
 clean:
 	rm -rf build/*
 	rm -f agave-*.tar.xz sha256sum.txt sha256sum.txt.sig
+	rm -f solana-release-x86_64-unknown-linux-gnu.tar.bz2
 
-release: agave-$(AGAVE_VERSION).tar.xz sha256sum.txt
+
+release: solana-release-x86_64-unknown-linux-gnu.tar.bz2 sha256sum.txt
 
 sign: sha256sum.txt.sig
 
 publish: release sign
-	gh release create --generate-notes $(AGAVE_VERSION) agave-$(AGAVE_VERSION).tar.xz sha256sum.txt sha256sum.txt.sig
+	gh release create --generate-notes $(AGAVE_VERSION) solana-release-x86_64-unknown-linux-gnu.tar.bz2 sha256sum.txt sha256sum.txt.sig
 
-sha256sum.txt: agave-$(AGAVE_VERSION).tar.xz
-	sha256sum agave-$(AGAVE_VERSION).tar.xz > sha256sum.txt
+sha256sum.txt: solana-release-x86_64-unknown-linux-gnu.tar.bz2
+	sha256sum solana-release-x86_64-unknown-linux-gnu.tar.bz2  > sha256sum.txt
 
 sha256sum.txt.sig: sha256sum.txt
 	gpg --detach-sign $^
+
+solana-release-x86_64-unknown-linux-gnu.tar.bz2: build
+	tar cvjf $@ -C build .
+
 
 agave-$(AGAVE_VERSION).tar.xz:
 	tar cvJf $@ -C build .
