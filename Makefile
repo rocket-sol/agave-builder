@@ -1,7 +1,7 @@
 .PHONY: build clean release
 
 # renovate: datasource=github-releases depName=anza-xyz/agave
-AGAVE_VERSION ?= v3.0.0
+AGAVE_VERSION ?= v3.0.1
 JOBS_NUM ?= $(shell nproc)
 
 CACHE_IMAGE_NAME = ghcr.io/rocket-sol/agave-builder
