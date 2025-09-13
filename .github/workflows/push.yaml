@@ -1,10 +1,9 @@
 ---
-name: release
+name: validate
 
 on:
   push:
     branches:
-    tags:
 
 env:
   JOBS_NUM: "4"
@@ -26,12 +25,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - run: docker buildx create --use
       - run: make build
+
+      # Create a release when on main
       - run: make release
+        if: github.ref == 'refs/heads/main'
       - name: Get version
+        if: github.ref == 'refs/heads/main'
         id: get_version
         run: echo "version=$(make version)" >> $GITHUB_OUTPUT
-
       - uses: ncipollo/release-action@v1
+        if: github.ref == 'refs/heads/main'
         with:
           commit: main
           tag: ${{ steps.get_version.outputs.version }}
