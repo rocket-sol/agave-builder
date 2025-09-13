@@ -8,7 +8,7 @@ CACHE_IMAGE_NAME = ghcr.io/rocket-sol/agave-builder
 
 ENABLE_CACHE ?= 1
 ifeq "$(ENABLE_CACHE)" "1"
-	DOCKER_BUILD_CACHE_ARGS := --cache-to=type=registry,ref=$(CACHE_IMAGE_NAME):cache,mode=max --cache-from=type=registry,ref=$(CACHE_IMAGE_NAME):cache --cache-from=type=registry,ref=$(CACHE_IMAGE_NAME):latest
+	DOCKER_BUILD_CACHE_ARGS := --cache-to=type=registry,ref=$(CACHE_IMAGE_NAME):cache-$(AGAVE_VERSION),mode=max --cache-from=type=registry,ref=$(CACHE_IMAGE_NAME):cache-$(AGAVE_VERSION) --cache-from=type=registry,ref=$(CACHE_IMAGE_NAME):latest
 endif
 
 build:
