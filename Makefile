@@ -25,9 +25,10 @@ clean:
 release: solana-release-x86_64-unknown-linux-gnu.tar.bz2 sha256sum.txt
 
 sign: sha256sum.txt.sig
+	gh release upload $(AGAVE_VERSION) sha256sum.txt.sig
 
-publish: release sign
-	gh release create --generate-notes $(AGAVE_VERSION) solana-release-x86_64-unknown-linux-gnu.tar.bz2 sha256sum.txt sha256sum.txt.sig
+publish: release
+	gh release create --generate-notes $(AGAVE_VERSION) solana-release-x86_64-unknown-linux-gnu.tar.bz2 sha256sum.txt
 
 version:
 	@echo $(AGAVE_VERSION)
