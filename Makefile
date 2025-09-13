@@ -8,7 +8,7 @@ CACHE_IMAGE_NAME = ghcr.io/rocket-sol/agave-builder
 
 ENABLE_CACHE ?= 1
 ifeq "$(ENABLE_CACHE)" "1"
-	DOCKER_BUILD_CACHE_ARGS := --cache-to=type=registry,ref=$(CACHE_IMAGE_NAME):cache,mode=max --cache-from=type=registry,ref=$(CACHE_IMAGE_NAME):cache --cache-from=type=registry,ref=$(CACHE_IMAGE_NAME):latest
+	DOCKER_BUILD_CACHE_ARGS := --cache-to=type=registry,ref=$(CACHE_IMAGE_NAME):cache-$(AGAVE_VERSION),mode=max --cache-from=type=registry,ref=$(CACHE_IMAGE_NAME):cache-$(AGAVE_VERSION) --cache-from=type=registry,ref=$(CACHE_IMAGE_NAME):latest
 endif
 
 build:
@@ -25,9 +25,10 @@ clean:
 release: solana-release-x86_64-unknown-linux-gnu.tar.bz2 sha256sum.txt
 
 sign: sha256sum.txt.sig
+	gh release upload $(AGAVE_VERSION) sha256sum.txt.sig
 
-publish: release sign
-	gh release create --generate-notes $(AGAVE_VERSION) solana-release-x86_64-unknown-linux-gnu.tar.bz2 sha256sum.txt sha256sum.txt.sig
+publish: release
+	gh release create --generate-notes $(AGAVE_VERSION) solana-release-x86_64-unknown-linux-gnu.tar.bz2 sha256sum.txt
 
 version:
 	@echo $(AGAVE_VERSION)
