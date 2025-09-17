@@ -39,4 +39,5 @@ jobs:
           commit: main
           tag: ${{ steps.get_version.outputs.version }}
           artifacts: "solana-*.tar.bz2,sha256sum.txt"
+          generateReleaseNotes: true
           skipIfReleaseExists: true
